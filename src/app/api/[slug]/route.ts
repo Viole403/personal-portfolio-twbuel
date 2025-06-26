@@ -1,9 +1,12 @@
-import { NextRequest, NextResponse } from "next/server";
+import { Elysia, t } from 'elysia';
 
-export async function GET(
-  request: NextRequest,
-  { params }: { params: Promise<{ slug: string }> },
-) {
-  const { slug } = await params;
-  return NextResponse.json({ message: `Hello ${slug}!` });
-}
+const app = new Elysia({ prefix: '/api' })
+  .get('/:slug', ({ params }) => ({
+    message: `Hello ${params.slug}!`
+  }), {
+    params: t.Object({
+      slug: t.String()
+    })
+  });
+
+export const GET = app.handle;
